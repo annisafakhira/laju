@@ -1,6 +1,7 @@
 Annisa Fakhira Cendeki - PBP C
 
 Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
+### TUGAS 2
 
 - Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
     1. Membuat sebuah proyek Django baru, buat direktori utama dengan membuat file kemudian untuk membuat proyek Django di dalamnya maka menggunakan "django-admin startproject <nama_proyek> ." (tanpa ""). Pada tugas ini maka saya menggunakan 'django-admin startproject laju .'(tanpa "") dengan memastikan sudah terdapat virtual environment dan telah diaktivasi virtual environment-nya serta telah install django, dependencies.
@@ -17,7 +18,6 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
     
     7. Melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses oleh teman-temanmu melalui Internet, untuk deployment maka create a new project terlebih dahulu pada PWS dan sesuaikan nama projectnya. Lalu edit environment variables sesuai isi file dari .env.prod. Kemudian, tambahkan URL deployment PWS di ALLOWED_HOSTS pada settings.py. Lalu push ke PWS, kemudian masukkan credentials yang diterima saat project di-create.
 
-
 - Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
     https://drive.google.com/file/d/1WqTpyvNFydObXMwS1HDC6aXtzHQjzM64/view?usp=sharing
 
@@ -32,3 +32,39 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
 
 - Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
     Tidak, penjelasan sudah lengkap dan mudah dipahami. Terima kasih kak!
+
+### TUGAS 3
+- Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+    Data delivery seperti kurir yang mengirim data antara server dan user sehingga jika user melakukan pembelian atau menambahkan produk maka data akan terkirim ke server. Selain itu, server juga mengirim data ke user dengan menampilkan informasi mengenai produk. Hal ini diperlukan agar data terupdate secara real-time.
+
+- Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+    Secara subjektif, JSON lebih mudah digunakan daripada XML karena lebih mudah untuk dibacanya. Kepopuleran JSON juga disebabkan oleh kecepatan pengirimannya karena ukurannya lebih kecil dari XML (tanpa tagging).
+
+- Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+    Method is_valid() pada form Django berguna untuk validasi form dari user dengan mengecek apakah input sudah sesuai aturan atau belum. Validasi jawabannya akan terlihat dari return boolean valuenya, jika method is_valid() mereturn True maka data akan diproses atau disimpan di database. Apabila method is_valid() mereturn False maka ada kesalahan dalam input, seperti data type tidak sesuai ataupun input yang wajib diisi itu kosong. Hal ini diperlukan agar data yang masuk sudah benar, aman, dan sesuai sehingga tidak menimbulkan bug ataupun error.
+
+- Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+    csrf_token adalah token otomatis yang disisipkan di setiap form HTML untuk membedakan setiap user dengan sistem session user. csrf_token dibutuhkan saat membuat form agar terhindar dari CSRF (Cross-Site Request Forgery). Jika tidak menambahkan csrf_token pada form Django maka penyerang bisa berpura-pura mengirim request dengan menyamar menjadi user. Hal tersebut yang dimanfaatkan oleh penyerang.
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+    1. Tambahkan 4 fungsi views baru untuk melihat objek yang sudah ditambahkan dalam format XML, JSON, XML by ID, dan JSON by ID. Pastikan sudah ada file views.py pada direktori aplikasi, kemudian tambahkan fungsi show_xml dan show_json untuk menampilkan data dalam bentuk XML dan JSON. Selain itu, dua fungsi lainnya adalah show_xml_by_id dan show_json_by_id untuk menampilkan data suatu objek sesuai IDnya. Datanya diambil dari models.py lalu pengubahan format menjadi XML dan JSON dilakukan dengan serializers.serialize. Pada show_xml_by_id pengambilan objek dilakukan dengan filter() serta pada show_json_by_id pengambilan objek dilakukan dengan get()
+
+    2. Membuat routing URL untuk masing-masing views yang telah ditambahkan pada poin 1, untuk routing URL masing-masing views maka menggunakan urls.py dengan menambahkan path-path yang sesuai dalam urlspattern pada urls.py di direktori aplikasi. Kemudian dihubungkan ke Djangonya dengan urls.py di direktori proyek melalui penambahan pathnya dengan include dalam urlspattern.
+
+    3. Membuat halaman yang menampilkan data objek model yang memiliki tombol "Add" yang akan redirect ke halaman form, serta tombol "Detail" pada setiap data objek model yang akan menampilkan halaman detail objek, untuk membuat halamannya maka gunakan fungsi di views.py untuk mengambil datanya dan akan diperlihatkan dengan main.html dan menambahkan tombol add di atas dengan 
+    "<a href="{% url 'main:add_product' %}">
+        <button>+ Add Product</button>
+    </a>" (tanpa"")
+    Selain itu untuk setiap product akan diberikan tombol Detail untuk page khusus informasi dari objek.
+    "<p><a href="{% url 'main:show_product' product.id %}"><button>Detail</button></a></p>" (tanpa"")
+    Semuanya didasarkan dengan fungsi add_product dan show_product yang ada pada views.py serta untuk buttonnya terlihat dengan main.html
+    
+    4. Membuat halaman form untuk menambahkan objek model pada app sebelumnya, untuk membuat form maka gunakan forms.py dengan fieldsnya sesuai pada fields di models.py. Kemudian buat fungsi juga yaitu add_product dan show_product di views.py serta hubungkan dan buat HTML nya untuk setiap fungsi agar dapat ditampilkan.
+    
+    5. Membuat halaman yang menampilkan detail dari setiap data objek model, untuk membuatnya maka buat fungsi (show_product) di views.py yang akan menampilkan satu produk sesuai ID dari URL. Data produk kemudian akan ditampilkan dengan membuat file HTML nya juga.
+
+- Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+    Tidak, penjelasan sudah lengkap dan mudah dipahami. Terima kasih kak!
+
+- Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
+    https://drive.google.com/drive/folders/1emSAwUY_sbiY3q0QaFFXOfmpDhIpzhO5?usp=sharing
