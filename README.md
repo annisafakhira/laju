@@ -1,8 +1,7 @@
 Annisa Fakhira Cendeki - PBP C
-
 Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
-### TUGAS 2
 
+### TUGAS 2
 - Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
     1. Membuat sebuah proyek Django baru, buat direktori utama dengan membuat file kemudian untuk membuat proyek Django di dalamnya maka menggunakan "django-admin startproject <nama_proyek> ." (tanpa ""). Pada tugas ini maka saya menggunakan 'django-admin startproject laju .'(tanpa "") dengan memastikan sudah terdapat virtual environment dan telah diaktivasi virtual environment-nya serta telah install django, dependencies.
 
@@ -32,6 +31,7 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
 
 - Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
     Tidak, penjelasan sudah lengkap dan mudah dipahami. Terima kasih kak!
+
 
 ### TUGAS 3
 - Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
@@ -68,3 +68,26 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
 
 - Mengakses keempat URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
     https://drive.google.com/drive/folders/1emSAwUY_sbiY3q0QaFFXOfmpDhIpzhO5?usp=sharing
+
+
+### TUGAS 4
+- Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+    Django AuthenticationForm sesuai namanya, merupakan form bawaan dari Django untuk mempermudah developer dengan menyediakan field otomatis untuk username dan password yang juga mengecek apakah data valid dan sesuai dengan yang ada di database. Kelebihannya tentu saja mempermudah developer karena tidak perlu membuat form manual dan sudah terintegrasi serta tervalidasi dengan database. Akan tetapi, Django AuthenticationForm tidak menyediakan untuk fitur kompleks seperti OTP ataupun login yang terkoneksi dengan aplikasi lain (email, facebook).
+
+- Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+    Autentikasi itu digunakan untuk memastikan user yang login dan validasi data user di database sedangkan otorisasi mengatur hak akses usernya. Sederhananya, autentikasi itu saat login awal dan user dapat mengakses fitur apa saja itu otorisasi. Pada Django, autentikasi dilakukan dengan AuthenticationForm dan dicek validasinya lalu memanggil login() sementara otorisasi dilakukan dengan membatasi akses melalui @login_required(login_url='/login').
+
+- Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
+    Cookies penyimpanannya langsung di browser sehingga mudah diakses setiap user open new tab serta sedikit memorinya jadi lebih cepat. Akan tetapi lebih berisiko untuk keamanan karena disimpan di client side dan memory sizenya terbatas. Sementara session disimpannya di server dan browser hanya memegang session ID sehingga lebih aman untuk keamanan tetapi berat untuk servernya karena server harus menyimpan data user yang sedang login.
+
+- Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+    Tidak, salah satu kekurangan cookies memang terletak pada risiko keamanannya karena penyimpanannya langsung di browser milik user sehingga berisiko dicuri atau dimanipulasi (XSS, session hijacking). Pada Django, session cookies disimpan dengan tanda khusus atau yang disebut signed cookies, kemudian HttpOnly juga agar cookies tidak bisa diakses sembarangan, serta Secure flag agar pengiriman cookies lebih aman. Semua pengaturan untuk kontrol keamanan cookies terdapat di settings.py.
+
+- Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). 
+    1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna mengakses aplikasi sebelumnya sesuai dengan status login/logoutnya, untuk membuat web dapat melakukan registrasi, login, logout, dan akses sesuai status login/logoutnya maka menggunakan beberapa class dan fungsi dari Django. UserCreationForm digunakan untuk proses registrasi sedangkan AuthenticationForm digunakan untuk proses login dengan memvalidasi kesesuaian informasinya. Sementara itu untuk logout menggunakan fungsi logout(request) yang juga bawaan dari Django. Kemudian untuk akses fitur yang disesuaikan oleh status login/logoutnya misal harus login untuk mengakses suatu fitur maka menggunakan  @login_required(login_url='/login').
+
+    2. Membuat dua (2) akun pengguna dengan masing-masing tiga (3) dummy data menggunakan model yang telah dibuat sebelumnya untuk setiap akun di lokal. Melakukan tahapan ini diawali dengan membuka localhost di browser (linknya terdapat setelah menjalankan python manage runserver). Kemudian lakukan register dan login dengan akun yang sudah dibuat. Setelahnya klik Add Product dan sesuaikan semua detail produknya. Lakukan hingga kedua akun memiliki setidaknya 3 produk.
+
+    3. Menghubungkan model Product dengan User, untuk menghubungkan model product dengan user maka menggunakan 'user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)' (tanpa'') di models.py serta untuk pengisian otomatis informasi data user yang sedang login terdapat di views.py seperti untuk mengetahui sellernya maka menggunakan 'product_entry.user = request.user' (tanpa'').
+
+    4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan cookies seperti last_login pada halaman utama aplikasi. Informasi user yang sedang login diketahui dari 'request.user' (tanpa''). Oleh karena itu, jika ingin menampilkan detail informasi user pada halaman utama aplikasi maka user perlu login terlebih dahulu untuk akses halaman utama aplikasi dan untuk mengeceknya menggunakan '@login_required' (tanpa''). Setelah memastikan data user yang sedang login dapat diambil maka untuk pengambilan data serta untuk menampilkannya nanti di template menggunakan fungsi show_main(request) di views.py pada bagian context (username dengan request.user.username dan last login dengan request.COOKIES.get('last_login', 'Never')). Terakhir, agar informasi last login benar maka saat login set cookienya dengan 'response.set_cookie('last_login', str(datetime.datetime.now()))'  (tanpa'') serta saat logout cookienya dihapus dengan 'response.delete_cookie('last_login')' (tanpa'').

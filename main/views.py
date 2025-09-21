@@ -59,9 +59,6 @@ def show_xml(request):
 
 def show_json(request):
     product_list = Product.objects.all()
-
-def show_json(request):
-    product_list = Product.objects.all()
     json_data = serializers.serialize("json", product_list)
     return HttpResponse(json_data, content_type="application/json")
 
