@@ -1,0 +1,38 @@
+.form-style button,
+.form-style input[type="submit"],
+.form-style input[type="button"] {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background: linear-gradient(90deg, #557385 0%, #054065 100%);
+    transition: all 0.3s ease;
+}
+
+.form-style button:hover,
+.form-style input[type="submit"]:hover,
+.form-style input[type="button"]:hover {
+    background: linear-gradient(90deg, #054065 0%, #0b1f3a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(11, 31, 58, 0.3);
+}
+
+.form-style button:focus,
+.form-style input[type="submit"]:focus,
+.form-style input[type="button"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(11, 31, 58, 0.4);
+}
+
+.form-style button:disabled,
+.form-style input[type="submit"]:disabled,
+.form-style input[type="button"]:disabled {
+    background: #bcbcbc;
+    cursor: not-allowed;
+    box-shadow: none;
+}

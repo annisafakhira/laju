@@ -3,6 +3,16 @@
 
 {% block meta %}
 <title>Edit Product - LAJU</title>
+<style>
+  :root {
+    --navy: #0b1f3a;
+    --navy-dark: #08162a;
+  }
+  .bg-navy { background-color: var(--navy); }
+  .hover\:bg-navy-dark:hover { background-color: var(--navy-dark); }
+  .text-navy { color: var(--navy); }
+  .hover\:text-navy-dark:hover { color: var(--navy-dark); }
+</style>
 {% endblock meta %}
 
 {% block content %}
@@ -46,7 +56,7 @@
           <a href="{% url 'main:show_main' %}" class="order-2 sm:order-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 transition-colors text-center">
             Cancel
           </a>
-          <button type="submit" class="order-1 sm:order-2 flex-1 bg-green-600 text-white px-6 py-3 rounded-md font-medium hover:bg-green-700 transition-colors">
+          <button type="submit" class="order-1 sm:order-2 flex-1 bg-navy hover:bg-navy-dark text-white px-6 py-3 rounded-md font-medium transition-colors">
             Update Product
           </button>
         </div>
