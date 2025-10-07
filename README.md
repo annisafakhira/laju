@@ -122,11 +122,16 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
 
 ### TUGAS 6
 - Apa perbedaan antara synchronous request dan asynchronous request?
+    Untuk synchronous request, setiap kali ada event misalnya menekan suatu button maka browser kirim request ke server dan user tunggu hingga server selesai membuat pagenya. Sementara pada asynchronous request misalnya dengan AJAX, JavaScript kirim request dan lanjut eksekusinya, server mengirim data, dan page bisa tetap dipakai. Oleh karena kedua perbedaan tersebut, penggunaan asynchronous request terasa lebih cepat untuk meresponse.
 
 - Bagaimana AJAX bekerja di Django (alur request–response)?
+    AJAX di Django berjalan dimulai dengan adanya event, misalnya menekan suatu button kemudian JavaScript (fetch/XHR) kirim suatu object request ke server (endpoint Django) tanpa reload halaman dan jika POST, header menyertakan CSRF token dari cookie. Requestnya kemudian masuk ke urls.py dan masuk ke view yang sesuai, selanjutnya view membaca data dan sesuaiin yang dibutuhkan apa. Response terkirim ke browser kemudian JavaScript menerima hasilnya lalu mengubah DOM, misalnya mengisi table dan menampilkan notifikasi, sehingga bagian page yang diinginkan berubah sesuai dengan request tetapi tanpa reload keseluruhan page.
 
 - Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+    Keuntungan utama dari penggunaan AJAX adalah cepat dan responsif karena bagian page yang diupdate hanya sebagian sesuai request, tanpa reload seluruh pagenya. Page tetap dapat digunakan meski sedang ada suatu event sehingga jika ingin implementasi suatu hal yang sifatnya real-time akan lebih mudah. Selain itu untuk pengerjaan kelompok akan mudah karena AJAX mendukung pemisahan masalah backend dan frontend.
 
 - Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+    Agar dapat menggunakan AJAX dengan aman maka render {% csrf_token %} dan JavaScript mengirim header X-CSRFToken sehingga request POST tidak bisa dilakukan oleh orang lain atas nama user lainnya. Selain itu, gunakan @login_required dan cek user yang sesuainya dengan (product.user == request.user) supaya user tak bisa mengubah product milik orang lain. Gunakan juga ProductForm(request.POST)/is_valid() lalu form.save(commit=False) untuk validasi tipe data ditanya. Jika ada response dari AJAX mengenai invalid login pakai JsonResponse yang minimal detailnya, jangan kasih tau letak kesalahannya. 
 
 - Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+    AJAX memperbagus UX karena AJAX tidak reload page keseluruhan sehingga lebih cepat dan responsif dan untuk interaksinya, seperti filter ataupun search juga berjalan dengan baik, dan validasi form juga bisa langsung serta data juga dapat diperbarui real-time, juga dapat memunculkan notifikasi. Akan tetapi, jika tidak disesuaikan dengan baik maka perubahan DOM dapat terkesan mengganggu.
