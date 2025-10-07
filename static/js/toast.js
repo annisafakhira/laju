@@ -27,11 +27,11 @@ function showToast(title, message, type = 'normal', duration = 3000) {
     toastTitle.textContent = title;
     toastMessage.textContent = message;
 
-    toastComponent.classList.remove('opacity-0', 'translate-y-64');
+    toastComponent.classList.remove('opacity-0', 'translate-y-full');
     toastComponent.classList.add('opacity-100', 'translate-y-0');
 
     setTimeout(() => {
         toastComponent.classList.remove('opacity-100', 'translate-y-0');
-        toastComponent.classList.add('opacity-0', 'translate-y-64');
+        toastComponent.classList.add('opacity-0', 'translate-y-full');
     }, duration);
 }

@@ -54,12 +54,12 @@
           Read more
         </a>
         <div class="flex space-x-2">
-          <a href="{% url 'main:edit_product' product.id %}" class="text-gray-600 hover:text-gray-700 text-sm transition-colors">
+          <div class="flex space-x-2">
+          <button 
+            class="text-gray-600 hover:text-gray-700 text-sm transition-colors"
+            onclick="editProductAJAX('{{ product.id }}')">
             Edit
-          </a>
-          <a href="{% url 'main:delete_product' product.id %}" class="text-red-600 hover:text-red-700 text-sm transition-colors">
-            Delete
-          </a>
+          <button onclick="showDeleteModal('{{ product.id }}')" class="text-red-600 hover:text-red-700 text-sm transition-colors">Delete</button>
         </div>
       </div>
     {% else %}

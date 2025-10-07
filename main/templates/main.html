@@ -69,9 +69,6 @@
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-2">No product found</h3>
       <p class="text-gray-500 mb-6">Be the first to share your product with the community.</p>
-      <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-navy text-white rounded-md hover:bg-navy-dark transition-colors">
-        Add Product
-      </a>
     </div>
   </div>
 </div>
@@ -94,6 +91,8 @@ let allProductData = [];
 
 // Update filter button style
 function updateFilterButtonsAppearance() {
+  if (!showAllProductButton || !showMyProductButton) return;
+
   if (activeFilter === 'all') {
     showAllProductButton.className = 'bg-navy text-white px-4 py-2 rounded-md font-medium transition-colors hover:bg-navy-dark';
     showMyProductButton.className = 'bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md font-medium transition-colors hover:bg-navy hover:text-white';
@@ -114,14 +113,23 @@ function displayPageSection({ showLoading = false, showError = false, showEmpty 
   }
 }
 
+function getReadableCategoryName(categoryCode) {
+  const categoryMapping = {
+    wear: 'Wear',
+    shoes: 'Shoes',
+    equipment: 'Equipment',
+    merchandise: 'Merchandise',
+  };
+
+  return categoryMapping[categoryCode] || categoryCode;
+}
+
 // Build card
 function buildProductCardElement(item) {
   const article = document.createElement('article');
   article.className = 'bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col h-full';
 
   const linkDetail = `{% url 'main:show_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', item.id);
-  const linkEdit = `{% url 'main:edit_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', item.id);
-  const linkDelete = `{% url 'main:delete_product' '00000000-0000-0000-0000-000000000000' %}`.replace('00000000-0000-0000-0000-000000000000', item.id);
 
   const name = DOMPurify.sanitize(item.name);
   const description = DOMPurify.sanitize(item.description);
@@ -143,10 +151,14 @@ function buildProductCardElement(item) {
   const hotLabel = isHot ? `<span class='inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800'>Hot</span>` : '';
 
   const editDeleteHtml = CURRENT_USER_ID && Number(CURRENT_USER_ID) === Number(item.user_id)
-    ? `<div class='flex space-x-2'>
-        <a href='${linkEdit}' class='text-gray-600 hover:text-gray-700 text-sm transition-colors'>Edit</a>
-        <a href='${linkDelete}' class='text-red-600 hover:text-red-700 text-sm transition-colors' onclick='return confirm("Are you sure?")'>Delete</a>
-      </div>` : '';
+  ? `<div class='flex space-x-2'>
+       <button 
+         onclick="editProductAJAX('${item.id}')" 
+         class='text-gray-600 hover:text-gray-700 text-sm transition-colors cursor-pointer'>
+         Edit
+       </button>
+       <button onclick="showDeleteModal('${item.id}')" class='text-red-600 hover:text-red-700 text-sm transition-colors'>Delete</button>
+     </div>` : '';
 
   article.innerHTML = `
     <div class="aspect-[16/9] relative overflow-hidden">
@@ -212,6 +224,7 @@ async function fetchProductFromServer() {
   }
 }
 
+
 // Event handler
 showAllProductButton.addEventListener('click', () => { activeFilter = 'all'; filterAndDisplayProduct(); });
 showMyProductButton.addEventListener('click', () => { activeFilter = 'my'; filterAndDisplayProduct(); });
@@ -221,5 +234,8 @@ fetchProductFromServer();
 
 // Refresh jika ada produk baru
 document.addEventListener('productAdded', () => fetchProductFromServer());
+document.addEventListener('productUpdated', () => fetchProductFromServer()); 
+document.addEventListener('productDeleted', () => fetchProductFromServer());
+
 </script>
 {% endblock content %}
