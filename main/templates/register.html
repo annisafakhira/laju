@@ -3,7 +3,6 @@
 {% block meta %}
 <title>Register - LAJU</title>
 <style>
-  /* Gradient Navy Button */
   .btn-gradient {
     background: linear-gradient(90deg, #557385 0%, #054065 100%);
     color: #fff;
@@ -14,13 +13,11 @@
     width: 100%;
     transition: all 0.3s ease;
   }
-
   .btn-gradient:hover {
     background: linear-gradient(90deg, #054065 0%, #0b1f3a 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(11, 31, 58, 0.3);
   }
-
   .btn-gradient:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(11, 31, 58, 0.4);
@@ -38,85 +35,33 @@
           <p class="text-gray-500">Create your LAJU account</p>
         </div>
 
-        <!-- Form Errors Display -->
-        {% if form.non_field_errors %}
-          <div class="mb-6">
-            {% for error in form.non_field_errors %}
-              <div class="px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700">
-                {{ error }}
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        {% if form.errors %}
-          <div class="mb-6">
-            {% for field, errors in form.errors.items %}
-              {% if field != '__all__' %}
-                {% for error in errors %}
-                  <div class="px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700 mb-2">
-                    <strong>{{ field|title }}:</strong> {{ error }}
-                  </div>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        <form method="POST" action="" class="space-y-5">
+        <div id="form-errors-container" class="mb-6 space-y-2"></div>
+        
+        <form id="register-form" method="POST" novalidate class="space-y-5">
           {% csrf_token %}
           
           <div>
             <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
-            <input 
-              id="username" 
-              name="username" 
-              type="text" 
-              required 
-              class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" 
-              placeholder="Choose a username">
+            <input id="username" name="username" type="text" required class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" placeholder="Choose a username">
           </div>
 
           <div>
             <label for="password1" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-            <input 
-              id="password1" 
-              name="password1" 
-              type="password" 
-              required 
-              class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" 
-              placeholder="Create a password">
+            <input id="password1" name="password1" type="password" required class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" placeholder="Create a password">
           </div>
 
           <div>
             <label for="password2" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
-            <input 
-              id="password2" 
-              name="password2" 
-              type="password" 
-              required 
-              class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" 
-              placeholder="Confirm your password">
+            <input id="password2" name="password2" type="password" required class="w-full px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-navy transition duration-200" placeholder="Confirm your password">
           </div>
 
-          <!-- Gradient Navy Button -->
           <button type="submit" class="btn-gradient">
             Create Account
           </button>
         </form>
 
-        <!-- Messages Display -->
         {% if messages %}
-          <div class="mt-6">
-            {% for message in messages %}
-              <div class="px-4 py-3 rounded text-sm border
-                          {% if message.tags == 'success' %} bg-green-50 border-green-200 text-green-700
-                          {% elif message.tags == 'error' %} bg-red-50 border-red-200 text-red-700
-                          {% else %} bg-gray-50 border-gray-200 text-gray-700 {% endif %}">
-                {{ message }}
-              </div>
-            {% endfor %}
-          </div>
+          ...
         {% endif %}
 
         <div class="mt-6 text-center">
@@ -131,4 +76,59 @@
     </div>
   </div>
 </div>
+
+<script>
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const errorsContainer = document.getElementById('form-errors-container');
+    errorsContainer.innerHTML = ''; 
+    const formData = new FormData(this);
+
+    try {
+        const response = await fetch("{% url 'main:register_ajax' %}", {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showToast('Account created successfully!', '', 'success');
+            setTimeout(() => {
+                window.location.href = "{% url 'main:login' %}";
+            }, 2000);
+        } else {
+            const errors = data.errors;
+            
+            if (errors.__all__) {
+                errors.__all__.forEach(message => {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700';
+                    errorDiv.textContent = message;
+                    errorsContainer.appendChild(errorDiv);
+                });
+            }
+
+            for (const field in errors) {
+                if (field === '__all__') continue;
+                
+                const errorMessages = errors[field];
+                errorMessages.forEach(message => {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'px-4 py-3 rounded text-sm border bg-red-50 border-red-200 text-red-700';
+                    const fieldName = field.charAt(0).toUpperCase() + field.slice(1).replace('1',' 1').replace('2',' 2');
+                    errorDiv.innerHTML = `<strong>${fieldName}:</strong> ${message}`;
+                    errorsContainer.appendChild(errorDiv);
+                });
+            }
+            showToast('Registration failed, please check the errors above.', '', 'error');
+        }
+    } catch (error) {
+        console.error('An error occurred:', error);
+        showToast('Could not connect to the server.', '', 'error');
+    }
+});
+</script>
+
 {% endblock content %}

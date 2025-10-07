@@ -188,3 +188,46 @@ def delete_product_ajax(request, id):
         return JsonResponse({"status": "success"}, status=200)
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    
+def register_ajax(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'success', 'message': 'Akun berhasil dibuat!'}, status=201)
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Metode tidak diizinkan.'}, status=405)
+
+def login_ajax(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            
+            response_data = {
+                'status': 'success',
+                'message': 'Login successful! Redirecting...',
+                'redirect_url': reverse('main:show_main')
+            }
+            response = JsonResponse(response_data)
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid username or password.'}, status=400)
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+
+def logout_ajax(request):
+    logout(request)
+    
+    response_data = {
+        'status': 'success',
+        'message': 'You have been successfully logged out.',
+        'redirect_url': reverse('main:login') 
+    }
+
+    response = JsonResponse(response_data)
+    response.delete_cookie('last_login')
+    return response
