@@ -117,3 +117,16 @@ Link PWS: https://annisa-fakhira41-laju.pbp.cs.ui.ac.id
         c. Untuk setiap card product, buatlah dua buah button untuk mengedit dan menghapus product pada card tersebut! Dua buah tombol di dalam card ditambahkan dengan <button> di HTML. Kemudian button terhubung dengan adanya urls.py. Kemudian untuk mengubah tampilannya gunakan CSS Tailwind.
 
         d. Buatlah navigation bar (navbar) untuk fitur-fitur pada aplikasi yang responsive terhadap perbedaan ukuran device, khususnya mobile dan desktop. Navbar yang responsive dilakukan dengan memanfaatkan CSS. Pada dasarnya, navbar dirancang menggunakan elemen <nav> yang berisi button dan lainnya.
+
+
+
+### TUGAS 6
+- Apa perbedaan antara synchronous request dan asynchronous request?
+
+- Bagaimana AJAX bekerja di Django (alur request–response)?
+
+- Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+
+- Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+
+- Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?

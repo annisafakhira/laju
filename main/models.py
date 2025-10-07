@@ -23,7 +23,7 @@ class Product(models.Model):
     brand = models.CharField(max_length=35, blank=True, null=True)
     
     def __str__(self):
-        return self.title
+        return self.name
     
     @property
     def is_product_hot(self):
