@@ -32,3 +32,18 @@ class Product(models.Model):
     def increment_views(self):
         self.product_views += 1
         self.save()
+    
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "price": self.price,
+            "description": self.description,
+            "category": self.category,
+            "thumbnail": self.thumbnail,
+            "is_featured": self.is_featured,
+            "stock": self.stock,
+            "product_views": self.product_views,
+            "brand": self.brand,
+            "user": self.user.username if self.user else None,
+        }
